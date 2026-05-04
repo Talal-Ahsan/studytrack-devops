@@ -108,29 +108,30 @@ pipeline {
                 body: """
                 <h2>StudyTrack Jenkins Pipeline Successful</h2>
 
-                <p>The Jenkins pipeline completed successfully.</p>
+                <p>The Jenkins pipeline completed successfully after a GitHub push.</p>
 
                 <h3>Pipeline Summary</h3>
                 <ul>
-                    <li>GitHub code was checked out successfully.</li>
+                    <li>GitHub repository code was checked out successfully.</li>
                     <li>Old Docker containers were removed.</li>
-                    <li>Application was built and started using Docker Compose.</li>
-                    <li>MySQL container started successfully.</li>
-                    <li>Node.js application container started successfully.</li>
-                    <li>Health route was verified successfully.</li>
+                    <li>Application was built using Docker.</li>
+                    <li>Application and MySQL database were started using Docker Compose.</li>
+                    <li>Application health route was verified successfully.</li>
                     <li>Selenium dependencies were installed.</li>
-                    <li>All Selenium test cases passed.</li>
+                    <li>All 15 Selenium test cases passed.</li>
+                    <li>Test results were archived in Jenkins.</li>
                 </ul>
 
                 <h3>Build Information</h3>
                 <p><b>Build Number:</b> ${BUILD_NUMBER}</p>
                 <p><b>Build URL:</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
                 <p><b>Deployment URL:</b> <a href="http://32.236.40.56:3000">http://32.236.40.56:3000</a></p>
+                <p><b>GitHub Repository:</b> <a href="https://github.com/Talal-Ahsan/studytrack-devops">https://github.com/Talal-Ahsan/studytrack-devops</a></p>
 
                 <h3>Test Result</h3>
-                <p><b>Result:</b> 15 Selenium test cases passed.</p>
+                <p><b>Result:</b> 15 Selenium test cases passed successfully.</p>
                 """,
-                to: "talalahsan6824@gmail.com, qasimmalik@gmail.com"
+                recipientProviders: [developers(), requestor()]
             )
         }
 
@@ -149,22 +150,25 @@ pipeline {
                 body: """
                 <h2>StudyTrack Jenkins Pipeline Failed</h2>
 
-                <p>The Jenkins pipeline failed. Please check the Jenkins console output.</p>
+                <p>The Jenkins pipeline failed after a GitHub push.</p>
 
                 <h3>Build Information</h3>
                 <p><b>Build Number:</b> ${BUILD_NUMBER}</p>
                 <p><b>Build URL:</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
+                <p><b>GitHub Repository:</b> <a href="https://github.com/Talal-Ahsan/studytrack-devops">https://github.com/Talal-Ahsan/studytrack-devops</a></p>
 
                 <h3>Possible Causes</h3>
                 <ul>
                     <li>Docker container failed to start.</li>
-                    <li>Database container failed.</li>
+                    <li>MySQL database container failed.</li>
                     <li>Application health check failed.</li>
                     <li>Selenium tests failed.</li>
                     <li>Dependency installation failed.</li>
                 </ul>
+
+                <p>Please check the Jenkins console output for full details.</p>
                 """,
-                to: "talalahsan6824@gmail.com, qasimmalik@gmail.com"
+                recipientProviders: [developers(), requestor()]
             )
         }
     }
