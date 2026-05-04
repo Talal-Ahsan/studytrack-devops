@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignments - StudyTrack</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>StudyTrack</h2>
+            <p class="tagline">Academic Progress Manager</p>
+
+            <a id="nav-dashboard" href="/">Dashboard</a>
+            <a id="nav-students" href="/students">Students</a>
+            <a id="nav-courses" href="/courses">Courses</a>
+            <a id="nav-assignments" class="active" href="/assignments">Assignments</a>
+        </aside>
+
+        <main class="content">
+            <div class="topbar">
+                <div>
+                    <h1 id="page-title">Assignments</h1>
+                    <p>Create, filter, update, and delete assignments.</p>
+                </div>
+                <span class="badge"><%= assignments.length %> Showing</span>
+            </div>
+
+            <% if (message) { %>
+                <div id="success-message" class="message-box">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <section class="panel">
+                <h2>Add New Assignment</h2>
+
+                <form id="assignment-form" action="/assignments/add" method="POST" class="assignment-grid">
+                    <input id="assignment-title" type="text" name="title" placeholder="Assignment title" required>
+
+                    <select id="assignment-course" name="course_id" required>
+                        <% courses.forEach(function(course) { %>
+                            <option value="<%= course.id %>"><%= course.title %></option>
+                        <% }) %>
+                    </select>
+
+                    <input id="assignment-date" type="date" name="due_date" required>
+
+                    <select id="assignment-priority" name="priority" required>
+                        <option value="High">High Priority</option>
+                        <option value="Medium">Medium Priority</option>
+                        <option value="Low">Low Priority</option>
+                    </select>
+
+                    <select id="assignment-status" name="status" required>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+
+                    <button id="add-assignment-btn" type="submit">Add Assignment</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <div class="section-header">
+                    <h2>Assignment Records</h2>
+
+                    <form id="filter-form" action="/assignments" method="GET" class="filter-box">
+                        <input id="assignment-search" type="text" name="search" value="<%= search %>" placeholder="Search assignment">
+
+                        <select id="status-filter" name="status">
+                            <option value="All" <%= selectedStatus === 'All' ? 'selected' : '' %>>All Status</option>
+                            <option value="Pending" <%= selectedStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                            <option value="In Progress" <%= selectedStatus === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                            <option value="Completed" <%= selectedStatus === 'Completed' ? 'selected' : '' %>>Completed</option>
+                        </select>
+
+                        <select id="priority-filter" name="priority">
+                            <option value="All" <%= selectedPriority === 'All' ? 'selected' : '' %>>All Priority</option>
+                            <option value="High" <%= selectedPriority === 'High' ? 'selected' : '' %>>High</option>
+                            <option value="Medium" <%= selectedPriority === 'Medium' ? 'selected' : '' %>>Medium</option>
+                            <option value="Low" <%= selectedPriority === 'Low' ? 'selected' : '' %>>Low</option>
+                        </select>
+
+                        <button id="filter-btn" type="submit">Apply</button>
+                        <a id="assignment-reset-btn" href="/assignments" class="small-link">Reset</a>
+                    </form>
+                </div>
+
+                <table id="assignments-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Course</th>
+                        <th>Due Date</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+                        <th>Delete</th>
+                    </tr>
+
+                    <% assignments.forEach(function(assignment) { %>
+                        <tr>
+                            <td><%= assignment.id %></td>
+                            <td><%= assignment.title %></td>
+                            <td><%= assignment.course_title %></td>
+                            <td><%= assignment.due_date.toISOString().split('T')[0] %></td>
+                            <td>
+                                <span class="priority-pill <%= assignment.priority.toLowerCase() %>">
+                                    <%= assignment.priority %>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-pill">
+                                    <%= assignment.status %>
+                                </span>
+                            </td>
+                            <td>
+                                <form action="/assignments/status/<%= assignment.id %>" method="POST" class="inline-form">
+                                    <select name="status">
+                                        <option value="Pending">Pending</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                    <button class="update-btn" type="submit">Update</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/assignments/delete/<%= assignment.id %>" method="POST">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Courses - StudyTrack</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>StudyTrack</h2>
+            <p class="tagline">Academic Progress Manager</p>
+
+            <a id="nav-dashboard" href="/">Dashboard</a>
+            <a id="nav-students" href="/students">Students</a>
+            <a id="nav-courses" class="active" href="/courses">Courses</a>
+            <a id="nav-assignments" href="/assignments">Assignments</a>
+        </aside>
+
+        <main class="content">
+            <div class="topbar">
+                <div>
+                    <h1 id="page-title">Courses</h1>
+                    <p>Create and manage course information.</p>
+                </div>
+                <span class="badge"><%= courses.length %> Courses</span>
+            </div>
+
+            <% if (message) { %>
+                <div id="success-message" class="message-box">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <section class="panel">
+                <h2>Add New Course</h2>
+
+                <form id="course-form" action="/courses/add" method="POST" class="form-grid">
+                    <input id="course-title" type="text" name="title" placeholder="Course title" required>
+                    <input id="course-code" type="text" name="code" placeholder="Course code" required>
+                    <input id="course-instructor" type="text" name="instructor" placeholder="Instructor name" required>
+                    <button id="add-course-btn" type="submit">Add Course</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <div class="section-header">
+                    <h2>Course List</h2>
+
+                    <form id="course-search-form" action="/courses" method="GET" class="search-box">
+                        <input id="course-search" type="text" name="search" value="<%= search %>" placeholder="Search course">
+                        <button id="course-search-btn" type="submit">Search</button>
+                        <a id="course-reset-btn" href="/courses" class="small-link">Reset</a>
+                    </form>
+                </div>
+
+                <table id="courses-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Code</th>
+                        <th>Instructor</th>
+                        <th>Action</th>
+                    </tr>
+
+                    <% courses.forEach(function(course) { %>
+                        <tr>
+                            <td><%= course.id %></td>
+                            <td><%= course.title %></td>
+                            <td><%= course.code %></td>
+                            <td><%= course.instructor %></td>
+                            <td>
+                                <form action="/courses/delete/<%= course.id %>" method="POST">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

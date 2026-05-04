@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Students - StudyTrack</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>StudyTrack</h2>
+            <p class="tagline">Academic Progress Manager</p>
+
+            <a id="nav-dashboard" href="/">Dashboard</a>
+            <a id="nav-students" class="active" href="/students">Students</a>
+            <a id="nav-courses" href="/courses">Courses</a>
+            <a id="nav-assignments" href="/assignments">Assignments</a>
+        </aside>
+
+        <main class="content">
+            <div class="topbar">
+                <div>
+                    <h1 id="page-title">Students</h1>
+                    <p>Add, search, and manage registered students.</p>
+                </div>
+                <span class="badge"><%= students.length %> Records</span>
+            </div>
+
+            <% if (message) { %>
+                <div id="success-message" class="message-box">
+                    <%= message %>
+                </div>
+            <% } %>
+
+            <section class="panel">
+                <h2>Add New Student</h2>
+
+                <form id="student-form" action="/students/add" method="POST" class="form-grid">
+                    <input id="student-name" type="text" name="name" placeholder="Student name" required>
+                    <input id="student-email" type="email" name="email" placeholder="Student email" required>
+                    <input id="student-semester" type="number" name="semester" placeholder="Semester" required>
+                    <button id="add-student-btn" type="submit">Add Student</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <div class="section-header">
+                    <h2>Student List</h2>
+
+                    <form id="student-search-form" action="/students" method="GET" class="search-box">
+                        <input id="student-search" type="text" name="search" value="<%= search %>" placeholder="Search student">
+                        <button id="student-search-btn" type="submit">Search</button>
+                        <a id="student-reset-btn" href="/students" class="small-link">Reset</a>
+                    </form>
+                </div>
+
+                <table id="students-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Semester</th>
+                        <th>Action</th>
+                    </tr>
+
+                    <% students.forEach(function(student) { %>
+                        <tr>
+                            <td><%= student.id %></td>
+                            <td><%= student.name %></td>
+                            <td><%= student.email %></td>
+                            <td><%= student.semester %></td>
+                            <td>
+                                <form action="/students/delete/<%= student.id %>" method="POST">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

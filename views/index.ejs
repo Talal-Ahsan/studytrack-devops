@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StudyTrack Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>StudyTrack</h2>
+            <p class="tagline">Academic Progress Manager</p>
+
+            <a id="nav-dashboard" class="active" href="/">Dashboard</a>
+            <a id="nav-students" href="/students">Students</a>
+            <a id="nav-courses" href="/courses">Courses</a>
+            <a id="nav-assignments" href="/assignments">Assignments</a>
+        </aside>
+
+        <main class="content">
+            <div class="topbar">
+                <div>
+                    <h1 id="page-title">Dashboard</h1>
+                    <p>Overview of students, courses, and assignment progress.</p>
+                </div>
+                <span class="badge">DevOps Ready</span>
+            </div>
+
+            <section class="hero">
+                <div>
+                    <h2>Welcome to StudyTrack</h2>
+                    <p>
+                        A database-driven academic management system built for automated Selenium testing,
+                        Jenkins pipeline execution, and containerized deployment.
+                    </p>
+                </div>
+                <a id="quick-add-assignment" href="/assignments" class="hero-btn">Manage Assignments</a>
+            </section>
+
+            <section class="cards">
+                <div class="card" id="student-card">
+                    <h3>Total Students</h3>
+                    <p><%= totalStudents %></p>
+                </div>
+
+                <div class="card" id="course-card">
+                    <h3>Total Courses</h3>
+                    <p><%= totalCourses %></p>
+                </div>
+
+                <div class="card" id="assignment-card">
+                    <h3>Total Assignments</h3>
+                    <p><%= totalAssignments %></p>
+                </div>
+
+                <div class="card warning" id="pending-card">
+                    <h3>Pending</h3>
+                    <p><%= pendingAssignments %></p>
+                </div>
+            </section>
+
+            <section class="split">
+                <div class="panel">
+                    <h2>Assignment Status</h2>
+
+                    <div class="status-line">
+                        <span>Pending</span>
+                        <strong id="pending-count"><%= pendingAssignments %></strong>
+                    </div>
+
+                    <div class="status-line">
+                        <span>In Progress</span>
+                        <strong id="progress-count"><%= progressAssignments %></strong>
+                    </div>
+
+                    <div class="status-line">
+                        <span>Completed</span>
+                        <strong id="completed-count"><%= completedAssignments %></strong>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>Upcoming Assignments</h2>
+
+                    <table id="recent-assignments-table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                        </tr>
+
+                        <% recentAssignments.forEach(function(assignment) { %>
+                            <tr>
+                                <td><%= assignment.title %></td>
+                                <td><%= assignment.course_title %></td>
+                                <td>
+                                    <span class="status-pill"><%= assignment.status %></span>
+                                </td>
+                                <td><%= assignment.due_date.toISOString().split('T')[0] %></td>
+                            </tr>
+                        <% }) %>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
