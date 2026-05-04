@@ -52,3 +52,4 @@ studytrack-devops/
 │
 └── tests/
     └── test_studytrack.py
+    Pipeline trigger test.
