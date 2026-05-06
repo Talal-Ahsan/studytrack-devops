@@ -54,3 +54,4 @@ studytrack-devops/
     └── test_studytrack.py
     Pipeline trigger tests
     hello in
+    Pipeline deployment trigger verified.
