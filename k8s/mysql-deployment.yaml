@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: studytrack-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: studytrack-mysql
+  template:
+    metadata:
+      labels:
+        app: studytrack-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: studytrack_db
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-init-script
+              mountPath: /docker-entrypoint-initdb.d
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+                - -uroot
+                - -proot
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 10
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: studytrack-mysql-pvc
+        - name: mysql-init-script
+          configMap:
+            name: studytrack-db-init
